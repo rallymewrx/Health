@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Apple Health Dashboard</title>
+  <title>My Comprehensive Health Dashboard</title>
 
   <!-- Google Font -->
   <link
@@ -15,25 +15,17 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* ---------------------------
-       Global / Reset
-    ----------------------------*/
-    * {
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box;
-    }
+    /* Global Reset & Font */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100%;
       min-height: 100%;
       font-family: 'Poppins', sans-serif;
-      background: #181818; /* Dark background */
-      color: #f5f5f5;      /* Light text */
+      background: #181818;
+      color: #f5f5f5;
     }
 
-    /* ---------------------------
-       Header / Hero
-    ----------------------------*/
+    /* Header */
     header {
       background: linear-gradient(135deg, #0D7377, #14FFEC);
       padding: 4rem 2rem;
@@ -41,34 +33,36 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
       box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
-    header h1 {
-      font-size: 2.5rem;
+    header h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+    header p { font-size: 1.1rem; opacity: 0.9; color: #e0f7f4; }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 1.8rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #fff;
-    }
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      color: #e0f7f4;
+      margin: 2rem 1rem 1rem;
+      color: #14FFEC;
+      text-align: center;
+      width: 100%;
     }
 
-    /* ---------------------------
-       Chart Container
-    ----------------------------*/
+    /* Dashboard Container */
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-bottom: 2rem;
+    }
+
+    /* Chart Container */
     .charts-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 2rem;
-      padding: 2rem 1rem;
-      max-width: 1400px;
-      margin: 0 auto;
+      padding: 1rem;
     }
 
-    /* ---------------------------
-       Chart Cards
-    ----------------------------*/
+    /* Chart Cards */
     .chart-card {
       background: #242424;
       border-radius: 12px;
@@ -93,29 +87,20 @@
       color: #14FFEC;
       text-align: center;
     }
-
-    /* Fixed-Height Chart Wrapper */
     .chart-wrapper {
       position: relative;
       width: 100%;
-      height: 300px; /* Adjust as needed (e.g. 400px) */
+      height: 300px;
     }
     .chart-wrapper canvas {
       position: absolute;
-      top: 0; 
-      left: 0;
+      top: 0; left: 0;
       width: 100% !important;
       height: 100% !important;
     }
+    @keyframes fadeIn { to { opacity: 1; } }
 
-    /* Simple fade-in animation */
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    /* ---------------------------
-       Footer
-    ----------------------------*/
+    /* Footer */
     footer {
       text-align: center;
       padding: 1rem;
@@ -123,152 +108,174 @@
       border-top: 1px solid rgba(255,255,255,0.1);
       margin-top: 1rem;
     }
-    footer p {
-      font-size: 0.9rem;
-      color: #888;
+    footer p { font-size: 0.9rem; color: #888; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .chart-card { width: 90%; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>My Apple Health Dashboard</h1>
-    <p>Visualizing Past Trends, Current Metrics & Future Projections</p>
+    <h1>My Comprehensive Health Dashboard</h1>
+    <p>Visualizing Your Health Metrics & Future Projections</p>
   </header>
 
-  <section class="charts-container">
+  <div class="dashboard-container">
 
-    <!-- 1) HRV -->
-    <div class="chart-card">
-      <h2>Heart Rate Variability (HRV)</h2>
-      <div class="chart-wrapper">
-        <canvas id="hrvChart"></canvas>
+    <!-- Cardiovascular Health Section -->
+    <div class="section-title">Cardiovascular Health</div>
+    <section class="charts-container">
+      <!-- HRV -->
+      <div class="chart-card">
+        <h2>Heart Rate Variability (HRV)</h2>
+        <div class="chart-wrapper"><canvas id="hrvChart"></canvas></div>
       </div>
-    </div>
-
-    <!-- 2) Sleep Duration -->
-    <div class="chart-card">
-      <h2>Sleep Duration</h2>
-      <div class="chart-wrapper">
-        <canvas id="sleepChart"></canvas>
+      <!-- Resting Heart Rate -->
+      <div class="chart-card">
+        <h2>Resting Heart Rate (RHR)</h2>
+        <div class="chart-wrapper"><canvas id="rhrChart"></canvas></div>
       </div>
-    </div>
-
-    <!-- 3) Exercise Minutes -->
-    <div class="chart-card">
-      <h2>Exercise Minutes</h2>
-      <div class="chart-wrapper">
-        <canvas id="exerciseChart"></canvas>
+      <!-- Steps -->
+      <div class="chart-card">
+        <h2>Daily Steps</h2>
+        <div class="chart-wrapper"><canvas id="stepsChart"></canvas></div>
       </div>
-    </div>
-
-    <!-- 4) Resting Heart Rate (RHR) -->
-    <div class="chart-card">
-      <h2>Resting Heart Rate (RHR)</h2>
-      <div class="chart-wrapper">
-        <canvas id="rhrChart"></canvas>
+      <!-- Blood Oxygen (SpO₂) -->
+      <div class="chart-card">
+        <h2>Blood Oxygen (SpO₂)</h2>
+        <div class="chart-wrapper"><canvas id="spo2Chart"></canvas></div>
       </div>
-    </div>
-
-    <!-- 5) Steps -->
-    <div class="chart-card">
-      <h2>Daily Steps</h2>
-      <div class="chart-wrapper">
-        <canvas id="stepsChart"></canvas>
+      <!-- VO₂ Max -->
+      <div class="chart-card">
+        <h2>VO₂ Max</h2>
+        <div class="chart-wrapper"><canvas id="vo2Chart"></canvas></div>
       </div>
-    </div>
+    </section>
 
-    <!-- 6) Body Weight -->
-    <div class="chart-card">
-      <h2>Body Weight</h2>
-      <div class="chart-wrapper">
-        <canvas id="weightChart"></canvas>
+    <!-- Sleep & Recovery Section -->
+    <div class="section-title">Sleep & Recovery</div>
+    <section class="charts-container">
+      <!-- Sleep Duration -->
+      <div class="chart-card">
+        <h2>Sleep Duration</h2>
+        <div class="chart-wrapper"><canvas id="sleepChart"></canvas></div>
       </div>
-    </div>
-
-    <!-- 7) Body Fat Percentage -->
-    <div class="chart-card">
-      <h2>Body Fat %</h2>
-      <div class="chart-wrapper">
-        <canvas id="bodyFatChart"></canvas>
+      <!-- Sleep Quality (Optional) -->
+      <div class="chart-card">
+        <h2>Sleep Quality</h2>
+        <div class="chart-wrapper"><canvas id="sleepQualityChart"></canvas></div>
       </div>
-    </div>
+      <!-- HR Zones during Sleep -->
+      <div class="chart-card">
+        <h2>HR Zones during Sleep</h2>
+        <div class="chart-wrapper"><canvas id="sleepHRZonesChart"></canvas></div>
+      </div>
+    </section>
 
-  </section>
+    <!-- Physical Activity Section -->
+    <div class="section-title">Physical Activity</div>
+    <section class="charts-container">
+      <!-- Exercise Minutes -->
+      <div class="chart-card">
+        <h2>Exercise Minutes</h2>
+        <div class="chart-wrapper"><canvas id="exerciseChart"></canvas></div>
+      </div>
+      <!-- Calories Burned -->
+      <div class="chart-card">
+        <h2>Calories Burned</h2>
+        <div class="chart-wrapper"><canvas id="caloriesChart"></canvas></div>
+      </div>
+      <!-- HR Zones during Exercise -->
+      <div class="chart-card">
+        <h2>HR Zones during Exercise</h2>
+        <div class="chart-wrapper"><canvas id="exerciseHRZonesChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Body Composition Section -->
+    <div class="section-title">Body Composition</div>
+    <section class="charts-container">
+      <!-- Body Weight -->
+      <div class="chart-card">
+        <h2>Body Weight</h2>
+        <div class="chart-wrapper"><canvas id="weightChart"></canvas></div>
+      </div>
+      <!-- Body Fat Percentage -->
+      <div class="chart-card">
+        <h2>Body Fat %</h2>
+        <div class="chart-wrapper"><canvas id="bodyFatChart"></canvas></div>
+      </div>
+      <!-- BMI -->
+      <div class="chart-card">
+        <h2>BMI</h2>
+        <div class="chart-wrapper"><canvas id="bmiChart"></canvas></div>
+      </div>
+      <!-- Hydration Tracking -->
+      <div class="chart-card">
+        <h2>Hydration Tracking</h2>
+        <div class="chart-wrapper"><canvas id="hydrationChart"></canvas></div>
+      </div>
+      <!-- Glucose Levels -->
+      <div class="chart-card">
+        <h2>Glucose Levels</h2>
+        <div class="chart-wrapper"><canvas id="glucoseChart"></canvas></div>
+      </div>
+    </section>
+
+  </div>
 
   <footer>
-    <p>&copy; 2025 My Health Dashboard</p>
+    <p>&copy; 2025 My Comprehensive Health Dashboard</p>
   </footer>
 
   <script>
     // ----------------------
     // SAMPLE DATA ARRAYS
-    // ----------------------
-    // Past years
+    // Time labels: Past & Future
     const labelsPast = ['2018','2019','2020','2021','2022','2023'];
-    // Future projections
     const labelsFuture = ['2024','2025'];
 
-    // 1) HRV
-    const hrvPast = [53,52,50,48,46,43];
-    const hrvFuture = [45,47];
+    // --- Cardiovascular ---
+    const hrvPast = [53,52,50,48,46,43], hrvFuture = [45,47];
+    const rhrPast = [55,57,60,58,56,54], rhrFuture = [53,52];
+    const stepsPast = [8000,7500,7000,9000,9500,10000], stepsFuture = [11000,12000];
+    const spo2Past = [97,96,97,96,97,97], spo2Future = [97,97]; // In percentage
+    const vo2Past = [38,39,40,41,42,43], vo2Future = [44,45]; // In mL/kg/min
 
-    // 2) Sleep Duration (hrs)
-    const sleepPast = [7.3,7.0,7.5,7.5,8.0,8.3];
-    const sleepFuture = [8.5,9.0];
+    // --- Sleep & Recovery ---
+    const sleepPast = [7.3,7.0,7.5,7.5,8.0,8.3], sleepFuture = [8.5,9.0];
+    const sleepQualityPast = [80,78,82,81,85,83], sleepQualityFuture = [86,88]; // e.g., score out of 100
+    const sleepHRZonesPast = [30,35,32,34,36,33], sleepHRZonesFuture = [34,35]; // e.g., minutes in deep sleep HR zone
 
-    // 3) Exercise Minutes
-    const exercisePast = [34,30,25,30,38,45];
-    const exerciseFuture = [50,55];
+    // --- Physical Activity ---
+    const exercisePast = [34,30,25,30,38,45], exerciseFuture = [50,55];
+    const caloriesPast = [220,230,240,235,250,245], caloriesFuture = [260,270]; // Active calories burned
+    const exerciseHRZonesPast = [10,12,11,13,14,12], exerciseHRZonesFuture = [14,15]; // Minutes in higher HR zones
 
-    // 4) Resting Heart Rate (RHR)
-    const rhrPast = [55,57,60,58,56,54];
-    const rhrFuture = [53,52];
+    // --- Body Composition ---
+    const weightPast = [185,183,180,178,175,174], weightFuture = [172,170];
+    const bodyFatPast = [22,21,20.5,20,19.5,19], bodyFatFuture = [18.5,18];
+    const bmiPast = [26,25.8,25.5,25.3,25,24.8], bmiFuture = [24.5,24.3];
+    const hydrationPast = [1.8,1.9,2.0,2.1,2.0,2.2], hydrationFuture = [2.3,2.4]; // Liters of water per day
+    const glucosePast = [90,92,88,91,89,87], glucoseFuture = [86,85]; // Fasting blood sugar in mg/dL
 
-    // 5) Daily Steps
-    const stepsPast = [8000,7500,7000,9000,9500,10000];
-    const stepsFuture = [11000,12000];
+    // Merge labels for each chart
+    const mergeLabels = () => labelsPast.concat(labelsFuture);
 
-    // 6) Body Weight (lbs)
-    const weightPast = [185,183,180,178,175,174];
-    const weightFuture = [172,170];
+    // Merge arrays
+    const mergeData = (past, future) => past.concat(future);
 
-    // 7) Body Fat %
-    const bodyFatPast = [22,21,20.5,20,19.5,19];
-    const bodyFatFuture = [18.5,18];
-
-    // Merge Past + Future
-    const hrvLabels = labelsPast.concat(labelsFuture);
-    const hrvData = hrvPast.concat(hrvFuture);
-
-    const sleepLabels = labelsPast.concat(labelsFuture);
-    const sleepData = sleepPast.concat(sleepFuture);
-
-    const exerciseLabels = labelsPast.concat(labelsFuture);
-    const exerciseData = exercisePast.concat(exerciseFuture);
-
-    const rhrLabels = labelsPast.concat(labelsFuture);
-    const rhrData = rhrPast.concat(rhrFuture);
-
-    const stepsLabels = labelsPast.concat(labelsFuture);
-    const stepsData = stepsPast.concat(stepsFuture);
-
-    const weightLabels = labelsPast.concat(labelsFuture);
-    const weightData = weightPast.concat(weightFuture);
-
-    const bodyFatLabels = labelsPast.concat(labelsFuture);
-    const bodyFatData = bodyFatPast.concat(bodyFatFuture);
-
-    // ----------------------
-    // SHARED DARK THEME OPTIONS
-    // ----------------------
-    const darkChartOptions = {
+    // Shared Dark Theme Options
+    const darkOptions = {
       responsive: true,
-      maintainAspectRatio: false, 
+      maintainAspectRatio: false,
       plugins: {
         legend: { labels: { color: '#f5f5f5' } },
-        title:  { color: '#f5f5f5' },
-        tooltip:{ titleColor:'#f5f5f5', bodyColor:'#f5f5f5', backgroundColor:'#333' }
+        title: { color: '#f5f5f5' },
+        tooltip: { titleColor: '#f5f5f5', bodyColor: '#f5f5f5', backgroundColor: '#333' }
       },
       scales: {
         x: {
@@ -285,281 +292,75 @@
     };
 
     // ----------------------
-    // 1) HRV CHART
+    // Helper to create charts
     // ----------------------
-    new Chart(document.getElementById('hrvChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: hrvLabels,
-        datasets: [{
-          label: 'HRV (ms)',
-          data: hrvData,
-          borderColor: '#FF3F66',
-          backgroundColor: 'rgba(255,63,102,0.2)',
-          pointBackgroundColor: '#FF3F66',
-          pointRadius: 5,
-          fill: true,
-          tension: 0.3
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Heart Rate Variability Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
+    function createChart(ctxId, chartType, labels, data, datasetLabel, borderColor, backgroundColor, yTitle, suggestedMax=null, beginAtZero=false) {
+      new Chart(document.getElementById(ctxId).getContext('2d'), {
+        type: chartType,
+        data: {
+          labels: labels,
+          datasets: [{
+            label: datasetLabel,
+            data: data,
+            borderColor: borderColor,
+            backgroundColor: backgroundColor,
+            pointBackgroundColor: borderColor,
+            pointRadius: 5,
+            fill: true,
+            tension: 0.3
+          }]
         },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: 'ms', color: '#f5f5f5' },
-            beginAtZero: false
+        options: {
+          ...darkOptions,
+          plugins: {
+            ...darkOptions.plugins,
+            title: {
+              display: true,
+              text: datasetLabel,
+              font: { size: 16 },
+              color: '#f5f5f5'
+            }
+          },
+          scales: {
+            x: { ...darkOptions.scales.x },
+            y: {
+              ...darkOptions.scales.y,
+              title: { display: true, text: yTitle, color: '#f5f5f5' },
+              beginAtZero: beginAtZero,
+              ...(suggestedMax !== null ? { suggestedMax: suggestedMax } : {})
+            }
           }
         }
-      }
-    });
+      });
+    }
 
     // ----------------------
-    // 2) SLEEP CHART
+    // Create Charts
     // ----------------------
-    new Chart(document.getElementById('sleepChart').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: sleepLabels,
-        datasets: [{
-          label: 'Sleep Duration (hours)',
-          data: sleepData,
-          backgroundColor: '#2DC7FF',
-          borderColor: '#1EA5DB',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Sleep Duration Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
-        },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: 'Hours', color: '#f5f5f5' },
-            beginAtZero: true,
-            suggestedMax: 10
-          }
-        }
-      }
-    });
 
-    // ----------------------
-    // 3) EXERCISE CHART
-    // ----------------------
-    new Chart(document.getElementById('exerciseChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: exerciseLabels,
-        datasets: [{
-          label: 'Daily Exercise Minutes',
-          data: exerciseData,
-          borderColor: '#33FFAA',
-          backgroundColor: 'rgba(51,255,170,0.2)',
-          pointBackgroundColor: '#33FFAA',
-          pointRadius: 5,
-          fill: true,
-          tension: 0.3
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Exercise Minutes Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
-        },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: 'Minutes', color: '#f5f5f5' },
-            beginAtZero: true
-          }
-        }
-      }
-    });
+    // Cardiovascular
+    createChart('hrvChart', 'line', mergeLabels(), mergeData(hrvPast, hrvFuture), 'HRV (ms)', '#FF3F66', 'rgba(255,63,102,0.2)', 'ms');
+    createChart('rhrChart', 'line', mergeLabels(), mergeData(rhrPast, rhrFuture), 'Resting HR (bpm)', '#FF8C3F', 'rgba(255,140,63,0.2)', 'bpm');
+    createChart('stepsChart', 'bar', mergeLabels(), mergeData(stepsPast, stepsFuture), 'Daily Steps', '#FFA62B', 'rgba(255,166,43,0.2)', 'steps', 12000, true);
+    createChart('spo2Chart', 'line', mergeLabels(), mergeData(spo2Past, spo2Future), 'Blood Oxygen (%)', '#4BC0C0', 'rgba(75,192,192,0.2)', '%');
+    createChart('vo2Chart', 'line', mergeLabels(), mergeData(vo2Past, vo2Future), 'VO₂ Max (mL/kg/min)', '#9966FF', 'rgba(153,102,255,0.2)', 'mL/kg/min');
 
-    // ----------------------
-    // 4) RHR CHART
-    // ----------------------
-    new Chart(document.getElementById('rhrChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: rhrLabels,
-        datasets: [{
-          label: 'RHR (bpm)',
-          data: rhrData,
-          borderColor: '#FF8C3F',
-          backgroundColor: 'rgba(255,140,63,0.2)',
-          pointBackgroundColor: '#FF8C3F',
-          pointRadius: 5,
-          fill: true,
-          tension: 0.3
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Resting Heart Rate Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
-        },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: 'bpm', color: '#f5f5f5' },
-            beginAtZero: false
-          }
-        }
-      }
-    });
+    // Sleep & Recovery
+    createChart('sleepChart', 'bar', mergeLabels(), mergeData(sleepPast, sleepFuture), 'Sleep Duration (hrs)', '#2DC7FF', 'rgba(45,199,255,0.2)', 'hrs', 10, true);
+    createChart('sleepQualityChart', 'line', mergeLabels(), mergeData(sleepQualityPast, sleepQualityFuture), 'Sleep Quality (Score)', '#FFCC00', 'rgba(255,204,0,0.2)', 'Score');
+    createChart('sleepHRZonesChart', 'line', mergeLabels(), mergeData(sleepHRZonesPast, sleepHRZonesFuture), 'Minutes in Deep Sleep HR Zone', '#66FF66', 'rgba(102,255,102,0.2)', 'mins');
 
-    // ----------------------
-    // 5) STEPS CHART
-    // ----------------------
-    new Chart(document.getElementById('stepsChart').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: stepsLabels,
-        datasets: [{
-          label: 'Daily Steps',
-          data: stepsData,
-          backgroundColor: '#FFA62B',
-          borderColor: '#E69529',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Daily Steps Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
-        },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: 'Steps', color: '#f5f5f5' },
-            beginAtZero: true,
-            suggestedMax: 12000
-          }
-        }
-      }
-    });
+    // Physical Activity
+    createChart('exerciseChart', 'line', mergeLabels(), mergeData(exercisePast, exerciseFuture), 'Exercise Minutes', '#33FFAA', 'rgba(51,255,170,0.2)', 'mins');
+    createChart('caloriesChart', 'bar', mergeLabels(), mergeData(caloriesPast, caloriesFuture), 'Active Calories Burned', '#FF5733', 'rgba(255,87,51,0.2)', 'kcal');
+    createChart('exerciseHRZonesChart', 'line', mergeLabels(), mergeData(exerciseHRZonesPast, exerciseHRZonesFuture), 'Minutes in High HR Zones', '#C70039', 'rgba(199,0,57,0.2)', 'mins');
 
-    // ----------------------
-    // 6) WEIGHT CHART
-    // ----------------------
-    new Chart(document.getElementById('weightChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: weightLabels,
-        datasets: [{
-          label: 'Body Weight (lbs)',
-          data: weightData,
-          borderColor: '#FF3FEC',
-          backgroundColor: 'rgba(255,63,236,0.2)',
-          pointBackgroundColor: '#FF3FEC',
-          pointRadius: 5,
-          fill: true,
-          tension: 0.3
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Body Weight Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
-        },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: 'lbs', color: '#f5f5f5' },
-            beginAtZero: false
-          }
-        }
-      }
-    });
-
-    // ----------------------
-    // 7) BODY FAT % CHART
-    // ----------------------
-    new Chart(document.getElementById('bodyFatChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: bodyFatLabels,
-        datasets: [{
-          label: 'Body Fat (%)',
-          data: bodyFatData,
-          borderColor: '#8F3FFF',
-          backgroundColor: 'rgba(143,63,255,0.2)',
-          pointBackgroundColor: '#8F3FFF',
-          pointRadius: 5,
-          fill: true,
-          tension: 0.3
-        }]
-      },
-      options: {
-        ...darkChartOptions,
-        plugins: {
-          ...darkChartOptions.plugins,
-          title: {
-            display: true,
-            text: 'Body Fat Percentage Trend',
-            color: '#f5f5f5',
-            font: { size: 16 }
-          }
-        },
-        scales: {
-          x: { ...darkChartOptions.scales.x },
-          y: {
-            ...darkChartOptions.scales.y,
-            title: { display: true, text: '%', color: '#f5f5f5' },
-            beginAtZero: false,
-            suggestedMax: 30
-          }
-        }
-      }
-    });
+    // Body Composition
+    createChart('weightChart', 'line', mergeLabels(), mergeData(weightPast, weightFuture), 'Body Weight (lbs)', '#FF3FEC', 'rgba(255,63,236,0.2)', 'lbs');
+    createChart('bodyFatChart', 'line', mergeLabels(), mergeData(bodyFatPast, bodyFatFuture), 'Body Fat (%)', '#8F3FFF', 'rgba(143,63,255,0.2)', '%');
+    createChart('bmiChart', 'line', mergeLabels(), mergeData(bmiPast, bmiFuture), 'BMI', '#00CCFF', 'rgba(0,204,255,0.2)', 'BMI');
+    createChart('hydrationChart', 'bar', mergeLabels(), mergeData(hydrationPast, hydrationFuture), 'Water Intake (L)', '#00FFDD', 'rgba(0,255,221,0.2)', 'L', 3, true);
+    createChart('glucoseChart', 'line', mergeLabels(), mergeData(glucosePast, glucoseFuture), 'Glucose (mg/dL)', '#FF3333', 'rgba(255,51,51,0.2)', 'mg/dL');
   </script>
 
 </body>
