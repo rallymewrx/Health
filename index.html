@@ -1,83 +1,119 @@
-(function(){
-  const htmlContent = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apple Health Dashboard</title>
-  <!-- Chart.js CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Apple Health Dashboard</title>
+  <!-- Load Chart.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Modern, responsive styling */
+    /* ----- Basic Reset & Font ----- */
     * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
       color: #333;
-      line-height: 1.6;
+      line-height: 1.5;
     }
+
+    /* ----- Header ----- */
     header {
       background: #2c3e50;
       color: #fff;
       padding: 2rem;
       text-align: center;
+      margin-bottom: 1rem;
     }
     header h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       margin-bottom: 0.5rem;
     }
     header p {
-      font-size: 1.1rem;
+      font-size: 1rem;
+      opacity: 0.9;
     }
+
+    /* ----- Chart Container ----- */
     .charts-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 2rem;
       gap: 2rem;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
+
     .chart-card {
       background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 1.5rem;
       width: 350px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .chart-card h2 {
-      text-align: center;
       margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #444;
+      text-align: center;
     }
+    .chart-card canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ----- Footer ----- */
     footer {
       text-align: center;
       padding: 1rem;
       background: #eee;
-      margin-top: 2rem;
+      margin-top: 1rem;
+    }
+    footer p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* ----- Responsive Adjustments ----- */
+    @media (max-width: 768px) {
+      .chart-card {
+        width: 90%;
+      }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>My Apple Health Data Dashboard</h1>
-    <p>Visualizing past trends, current metrics, and future projections (2024/25)</p>
+    <h1>My Apple Health Dashboard</h1>
+    <p>Visualizing Past Trends, Current Metrics, & Future Projections</p>
   </header>
 
   <section class="charts-container">
+
+    <!-- HRV Card -->
     <div class="chart-card">
       <h2>Heart Rate Variability (HRV)</h2>
       <canvas id="hrvChart"></canvas>
     </div>
+
+    <!-- Sleep Card -->
     <div class="chart-card">
       <h2>Sleep Duration</h2>
       <canvas id="sleepChart"></canvas>
     </div>
+
+    <!-- Exercise Card -->
     <div class="chart-card">
       <h2>Exercise Minutes</h2>
       <canvas id="exerciseChart"></canvas>
     </div>
+
   </section>
 
   <footer>
@@ -85,43 +121,44 @@
   </footer>
 
   <script>
-    // Sample data arrays: historical (past) and projections (future)
-    const labelsPast = ['2018', '2019', '2020', '2021', '2022', '2023'];
-    const labelsFuture = ['2024', '2025'];
-    
-    // Historical data arrays
-    const hrvPast = [53, 52, 50, 48, 46, 43]; // HRV in ms
-    const sleepPast = [7.3, 7.0, 7.5, 7.5, 8.0, 8.3]; // Sleep duration in hours
-    const exercisePast = [34, 30, 25, 30, 38, 45]; // Daily exercise minutes
+    // -------- Sample Data (Adjust As Needed) --------
+    const labelsPast = ['2018','2019','2020','2021','2022','2023'];
+    const labelsFuture = ['2024','2025'];
 
-    // Future projections data arrays (adjust these values as needed)
-    const hrvFuture = [45, 47];      // Projected HRV values in ms
-    const sleepFuture = [8.5, 9.0];    // Projected sleep duration (hours)
-    const exerciseFuture = [50, 55];   // Projected exercise minutes
+    // Historical data
+    const hrvPast = [53,52,50,48,46,43];
+    const sleepPast = [7.3,7.0,7.5,7.5,8.0,8.3];
+    const exercisePast = [34,30,25,30,38,45];
 
-    // Merge historical and future data
-    const labelsHRV = labelsPast.concat(labelsFuture);
-    const labelsSleep = labelsPast.concat(labelsFuture);
-    const labelsExercise = labelsPast.concat(labelsFuture);
+    // Future Projections
+    const hrvFuture = [45,47];
+    const sleepFuture = [8.5,9.0];
+    const exerciseFuture = [50,55];
 
+    // Merge Past + Future
+    const hrvLabels = labelsPast.concat(labelsFuture);
     const hrvData = hrvPast.concat(hrvFuture);
+
+    const sleepLabels = labelsPast.concat(labelsFuture);
     const sleepData = sleepPast.concat(sleepFuture);
+
+    const exerciseLabels = labelsPast.concat(labelsFuture);
     const exerciseData = exercisePast.concat(exerciseFuture);
 
-    // HRV Chart
-    const ctxHRV = document.getElementById('hrvChart').getContext('2d');
-    new Chart(ctxHRV, {
+    // -------- Chart: HRV --------
+    const hrvCtx = document.getElementById('hrvChart').getContext('2d');
+    new Chart(hrvCtx, {
       type: 'line',
       data: {
-        labels: labelsHRV,
+        labels: hrvLabels,
         datasets: [{
           label: 'HRV (ms)',
           data: hrvData,
           borderColor: '#e74c3c',
-          backgroundColor: 'rgba(231, 76, 60, 0.1)',
-          tension: 0.3,
+          backgroundColor: 'rgba(231,76,60,0.1)',
+          pointBackgroundColor: '#e74c3c',
           fill: true,
-          pointRadius: 4
+          tension: 0.3
         }]
       },
       options: {
@@ -135,29 +172,29 @@
           }
         },
         scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          },
           y: {
             title: {
               display: true,
               text: 'ms'
             },
             beginAtZero: false
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Year'
-            }
           }
         }
       }
     });
 
-    // Sleep Chart
-    const ctxSleep = document.getElementById('sleepChart').getContext('2d');
-    new Chart(ctxSleep, {
+    // -------- Chart: Sleep --------
+    const sleepCtx = document.getElementById('sleepChart').getContext('2d');
+    new Chart(sleepCtx, {
       type: 'bar',
       data: {
-        labels: labelsSleep,
+        labels: sleepLabels,
         datasets: [{
           label: 'Sleep Duration (hours)',
           data: sleepData,
@@ -177,6 +214,12 @@
           }
         },
         scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          },
           y: {
             title: {
               display: true,
@@ -184,31 +227,25 @@
             },
             beginAtZero: true,
             suggestedMax: 10
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Year'
-            }
           }
         }
       }
     });
 
-    // Exercise Minutes Chart
-    const ctxExercise = document.getElementById('exerciseChart').getContext('2d');
-    new Chart(ctxExercise, {
+    // -------- Chart: Exercise --------
+    const exerciseCtx = document.getElementById('exerciseChart').getContext('2d');
+    new Chart(exerciseCtx, {
       type: 'line',
       data: {
-        labels: labelsExercise,
+        labels: exerciseLabels,
         datasets: [{
           label: 'Daily Exercise Minutes',
           data: exerciseData,
           borderColor: '#27ae60',
-          backgroundColor: 'rgba(39, 174, 96, 0.1)',
-          tension: 0.3,
+          backgroundColor: 'rgba(39,174,96,0.1)',
+          pointBackgroundColor: '#27ae60',
           fill: true,
-          pointRadius: 4
+          tension: 0.3
         }]
       },
       options: {
@@ -222,34 +259,23 @@
           }
         },
         scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          },
           y: {
             title: {
               display: true,
               text: 'Minutes'
             },
             beginAtZero: true
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Year'
-            }
           }
         }
       }
     });
-  <\/script>
+  </script>
+
 </body>
-</html>`;
-  
-  // Create a Blob with the HTML content
-  const blob = new Blob([htmlContent], { type: "text/html" });
-  const url = URL.createObjectURL(blob);
-  // Create a temporary download link and trigger the download
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "index.html";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-})();
+</html>
