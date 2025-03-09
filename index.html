@@ -93,9 +93,19 @@
       color: #14FFEC;
       text-align: center;
     }
-    .chart-card canvas {
+
+    /* Fixed-Height Chart Wrapper */
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
+      height: 300px; /* Adjust as needed (e.g. 400px) */
+    }
+    .chart-wrapper canvas {
+      position: absolute;
+      top: 0; 
+      left: 0;
       width: 100% !important;
-      height: auto !important;
+      height: 100% !important;
     }
 
     /* Simple fade-in animation */
@@ -129,17 +139,25 @@
     <!-- HRV Card -->
     <div class="chart-card">
       <h2>Heart Rate Variability (HRV)</h2>
-      <canvas id="hrvChart"></canvas>
+      <div class="chart-wrapper">
+        <canvas id="hrvChart"></canvas>
+      </div>
     </div>
+
     <!-- Sleep Card -->
     <div class="chart-card">
       <h2>Sleep Duration</h2>
-      <canvas id="sleepChart"></canvas>
+      <div class="chart-wrapper">
+        <canvas id="sleepChart"></canvas>
+      </div>
     </div>
+
     <!-- Exercise Card -->
     <div class="chart-card">
       <h2>Exercise Minutes</h2>
-      <canvas id="exerciseChart"></canvas>
+      <div class="chart-wrapper">
+        <canvas id="exerciseChart"></canvas>
+      </div>
     </div>
   </section>
 
@@ -175,6 +193,7 @@
     // Shared Chart Options for a Dark Theme
     const darkChartOptions = {
       responsive: true,
+      // Maintaining aspect ratio is off so we can fill the .chart-wrapper height
       maintainAspectRatio: false,
       plugins: {
         legend: { labels: { color: '#f5f5f5' } },
@@ -196,8 +215,7 @@
     };
 
     // -------- Chart: HRV --------
-    const hrvCtx = document.getElementById('hrvChart').getContext('2d');
-    new Chart(hrvCtx, {
+    new Chart(document.getElementById('hrvChart').getContext('2d'), {
       type: 'line',
       data: {
         labels: hrvLabels,
@@ -235,8 +253,7 @@
     });
 
     // -------- Chart: Sleep --------
-    const sleepCtx = document.getElementById('sleepChart').getContext('2d');
-    new Chart(sleepCtx, {
+    new Chart(document.getElementById('sleepChart').getContext('2d'), {
       type: 'bar',
       data: {
         labels: sleepLabels,
@@ -272,8 +289,7 @@
     });
 
     // -------- Chart: Exercise --------
-    const exerciseCtx = document.getElementById('exerciseChart').getContext('2d');
-    new Chart(exerciseCtx, {
+    new Chart(document.getElementById('exerciseChart').getContext('2d'), {
       type: 'line',
       data: {
         labels: exerciseLabels,
