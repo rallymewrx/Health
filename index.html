@@ -121,6 +121,7 @@
       padding: 1rem;
       background: #1f1f1f;
       border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 1rem;
     }
     footer p {
       font-size: 0.9rem;
@@ -136,7 +137,8 @@
   </header>
 
   <section class="charts-container">
-    <!-- HRV Card -->
+
+    <!-- 1) HRV -->
     <div class="chart-card">
       <h2>Heart Rate Variability (HRV)</h2>
       <div class="chart-wrapper">
@@ -144,7 +146,7 @@
       </div>
     </div>
 
-    <!-- Sleep Card -->
+    <!-- 2) Sleep Duration -->
     <div class="chart-card">
       <h2>Sleep Duration</h2>
       <div class="chart-wrapper">
@@ -152,13 +154,46 @@
       </div>
     </div>
 
-    <!-- Exercise Card -->
+    <!-- 3) Exercise Minutes -->
     <div class="chart-card">
       <h2>Exercise Minutes</h2>
       <div class="chart-wrapper">
         <canvas id="exerciseChart"></canvas>
       </div>
     </div>
+
+    <!-- 4) Resting Heart Rate (RHR) -->
+    <div class="chart-card">
+      <h2>Resting Heart Rate (RHR)</h2>
+      <div class="chart-wrapper">
+        <canvas id="rhrChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 5) Steps -->
+    <div class="chart-card">
+      <h2>Daily Steps</h2>
+      <div class="chart-wrapper">
+        <canvas id="stepsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 6) Body Weight -->
+    <div class="chart-card">
+      <h2>Body Weight</h2>
+      <div class="chart-wrapper">
+        <canvas id="weightChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 7) Body Fat Percentage -->
+    <div class="chart-card">
+      <h2>Body Fat %</h2>
+      <div class="chart-wrapper">
+        <canvas id="bodyFatChart"></canvas>
+      </div>
+    </div>
+
   </section>
 
   <footer>
@@ -166,19 +201,41 @@
   </footer>
 
   <script>
-    // -------- Sample Data (Adjust As Needed) --------
+    // ----------------------
+    // SAMPLE DATA ARRAYS
+    // ----------------------
+    // Past years
     const labelsPast = ['2018','2019','2020','2021','2022','2023'];
+    // Future projections
     const labelsFuture = ['2024','2025'];
 
-    // Historical data
+    // 1) HRV
     const hrvPast = [53,52,50,48,46,43];
-    const sleepPast = [7.3,7.0,7.5,7.5,8.0,8.3];
-    const exercisePast = [34,30,25,30,38,45];
-
-    // Future Projections
     const hrvFuture = [45,47];
+
+    // 2) Sleep Duration (hrs)
+    const sleepPast = [7.3,7.0,7.5,7.5,8.0,8.3];
     const sleepFuture = [8.5,9.0];
+
+    // 3) Exercise Minutes
+    const exercisePast = [34,30,25,30,38,45];
     const exerciseFuture = [50,55];
+
+    // 4) Resting Heart Rate (RHR)
+    const rhrPast = [55,57,60,58,56,54];
+    const rhrFuture = [53,52];
+
+    // 5) Daily Steps
+    const stepsPast = [8000,7500,7000,9000,9500,10000];
+    const stepsFuture = [11000,12000];
+
+    // 6) Body Weight (lbs)
+    const weightPast = [185,183,180,178,175,174];
+    const weightFuture = [172,170];
+
+    // 7) Body Fat %
+    const bodyFatPast = [22,21,20.5,20,19.5,19];
+    const bodyFatFuture = [18.5,18];
 
     // Merge Past + Future
     const hrvLabels = labelsPast.concat(labelsFuture);
@@ -190,11 +247,24 @@
     const exerciseLabels = labelsPast.concat(labelsFuture);
     const exerciseData = exercisePast.concat(exerciseFuture);
 
-    // Shared Chart Options for a Dark Theme
+    const rhrLabels = labelsPast.concat(labelsFuture);
+    const rhrData = rhrPast.concat(rhrFuture);
+
+    const stepsLabels = labelsPast.concat(labelsFuture);
+    const stepsData = stepsPast.concat(stepsFuture);
+
+    const weightLabels = labelsPast.concat(labelsFuture);
+    const weightData = weightPast.concat(weightFuture);
+
+    const bodyFatLabels = labelsPast.concat(labelsFuture);
+    const bodyFatData = bodyFatPast.concat(bodyFatFuture);
+
+    // ----------------------
+    // SHARED DARK THEME OPTIONS
+    // ----------------------
     const darkChartOptions = {
       responsive: true,
-      // Maintaining aspect ratio is off so we can fill the .chart-wrapper height
-      maintainAspectRatio: false,
+      maintainAspectRatio: false, 
       plugins: {
         legend: { labels: { color: '#f5f5f5' } },
         title:  { color: '#f5f5f5' },
@@ -214,7 +284,9 @@
       }
     };
 
-    // -------- Chart: HRV --------
+    // ----------------------
+    // 1) HRV CHART
+    // ----------------------
     new Chart(document.getElementById('hrvChart').getContext('2d'), {
       type: 'line',
       data: {
@@ -252,7 +324,9 @@
       }
     });
 
-    // -------- Chart: Sleep --------
+    // ----------------------
+    // 2) SLEEP CHART
+    // ----------------------
     new Chart(document.getElementById('sleepChart').getContext('2d'), {
       type: 'bar',
       data: {
@@ -288,7 +362,9 @@
       }
     });
 
-    // -------- Chart: Exercise --------
+    // ----------------------
+    // 3) EXERCISE CHART
+    // ----------------------
     new Chart(document.getElementById('exerciseChart').getContext('2d'), {
       type: 'line',
       data: {
@@ -321,6 +397,165 @@
             ...darkChartOptions.scales.y,
             title: { display: true, text: 'Minutes', color: '#f5f5f5' },
             beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // ----------------------
+    // 4) RHR CHART
+    // ----------------------
+    new Chart(document.getElementById('rhrChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: rhrLabels,
+        datasets: [{
+          label: 'RHR (bpm)',
+          data: rhrData,
+          borderColor: '#FF8C3F',
+          backgroundColor: 'rgba(255,140,63,0.2)',
+          pointBackgroundColor: '#FF8C3F',
+          pointRadius: 5,
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        ...darkChartOptions,
+        plugins: {
+          ...darkChartOptions.plugins,
+          title: {
+            display: true,
+            text: 'Resting Heart Rate Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
+          }
+        },
+        scales: {
+          x: { ...darkChartOptions.scales.x },
+          y: {
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: 'bpm', color: '#f5f5f5' },
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+    // ----------------------
+    // 5) STEPS CHART
+    // ----------------------
+    new Chart(document.getElementById('stepsChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: stepsLabels,
+        datasets: [{
+          label: 'Daily Steps',
+          data: stepsData,
+          backgroundColor: '#FFA62B',
+          borderColor: '#E69529',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        ...darkChartOptions,
+        plugins: {
+          ...darkChartOptions.plugins,
+          title: {
+            display: true,
+            text: 'Daily Steps Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
+          }
+        },
+        scales: {
+          x: { ...darkChartOptions.scales.x },
+          y: {
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: 'Steps', color: '#f5f5f5' },
+            beginAtZero: true,
+            suggestedMax: 12000
+          }
+        }
+      }
+    });
+
+    // ----------------------
+    // 6) WEIGHT CHART
+    // ----------------------
+    new Chart(document.getElementById('weightChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: weightLabels,
+        datasets: [{
+          label: 'Body Weight (lbs)',
+          data: weightData,
+          borderColor: '#FF3FEC',
+          backgroundColor: 'rgba(255,63,236,0.2)',
+          pointBackgroundColor: '#FF3FEC',
+          pointRadius: 5,
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        ...darkChartOptions,
+        plugins: {
+          ...darkChartOptions.plugins,
+          title: {
+            display: true,
+            text: 'Body Weight Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
+          }
+        },
+        scales: {
+          x: { ...darkChartOptions.scales.x },
+          y: {
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: 'lbs', color: '#f5f5f5' },
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+    // ----------------------
+    // 7) BODY FAT % CHART
+    // ----------------------
+    new Chart(document.getElementById('bodyFatChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: bodyFatLabels,
+        datasets: [{
+          label: 'Body Fat (%)',
+          data: bodyFatData,
+          borderColor: '#8F3FFF',
+          backgroundColor: 'rgba(143,63,255,0.2)',
+          pointBackgroundColor: '#8F3FFF',
+          pointRadius: 5,
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        ...darkChartOptions,
+        plugins: {
+          ...darkChartOptions.plugins,
+          title: {
+            display: true,
+            text: 'Body Fat Percentage Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
+          }
+        },
+        scales: {
+          x: { ...darkChartOptions.scales.x },
+          y: {
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: '%', color: '#f5f5f5' },
+            beginAtZero: false,
+            suggestedMax: 30
           }
         }
       }
