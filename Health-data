@@ -1,0 +1,255 @@
+(function(){
+  const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple Health Dashboard</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Modern, responsive styling */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1.1rem;
+    }
+    .charts-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2rem;
+    }
+    .chart-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      width: 350px;
+    }
+    .chart-card h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #eee;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Apple Health Data Dashboard</h1>
+    <p>Visualizing past trends, current metrics, and future projections (2024/25)</p>
+  </header>
+
+  <section class="charts-container">
+    <div class="chart-card">
+      <h2>Heart Rate Variability (HRV)</h2>
+      <canvas id="hrvChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h2>Sleep Duration</h2>
+      <canvas id="sleepChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h2>Exercise Minutes</h2>
+      <canvas id="exerciseChart"></canvas>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 My Health Dashboard</p>
+  </footer>
+
+  <script>
+    // Sample data arrays: historical (past) and projections (future)
+    const labelsPast = ['2018', '2019', '2020', '2021', '2022', '2023'];
+    const labelsFuture = ['2024', '2025'];
+    
+    // Historical data arrays
+    const hrvPast = [53, 52, 50, 48, 46, 43]; // HRV in ms
+    const sleepPast = [7.3, 7.0, 7.5, 7.5, 8.0, 8.3]; // Sleep duration in hours
+    const exercisePast = [34, 30, 25, 30, 38, 45]; // Daily exercise minutes
+
+    // Future projections data arrays (adjust these values as needed)
+    const hrvFuture = [45, 47];      // Projected HRV values in ms
+    const sleepFuture = [8.5, 9.0];    // Projected sleep duration (hours)
+    const exerciseFuture = [50, 55];   // Projected exercise minutes
+
+    // Merge historical and future data
+    const labelsHRV = labelsPast.concat(labelsFuture);
+    const labelsSleep = labelsPast.concat(labelsFuture);
+    const labelsExercise = labelsPast.concat(labelsFuture);
+
+    const hrvData = hrvPast.concat(hrvFuture);
+    const sleepData = sleepPast.concat(sleepFuture);
+    const exerciseData = exercisePast.concat(exerciseFuture);
+
+    // HRV Chart
+    const ctxHRV = document.getElementById('hrvChart').getContext('2d');
+    new Chart(ctxHRV, {
+      type: 'line',
+      data: {
+        labels: labelsHRV,
+        datasets: [{
+          label: 'HRV (ms)',
+          data: hrvData,
+          borderColor: '#e74c3c',
+          backgroundColor: 'rgba(231, 76, 60, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Heart Rate Variability Trend'
+          },
+          tooltip: {
+            mode: 'index'
+          }
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'ms'
+            },
+            beginAtZero: false
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    });
+
+    // Sleep Chart
+    const ctxSleep = document.getElementById('sleepChart').getContext('2d');
+    new Chart(ctxSleep, {
+      type: 'bar',
+      data: {
+        labels: labelsSleep,
+        datasets: [{
+          label: 'Sleep Duration (hours)',
+          data: sleepData,
+          backgroundColor: '#3498db',
+          borderColor: '#2980b9',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sleep Duration Trend'
+          },
+          tooltip: {
+            mode: 'index'
+          }
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Hours'
+            },
+            beginAtZero: true,
+            suggestedMax: 10
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    });
+
+    // Exercise Minutes Chart
+    const ctxExercise = document.getElementById('exerciseChart').getContext('2d');
+    new Chart(ctxExercise, {
+      type: 'line',
+      data: {
+        labels: labelsExercise,
+        datasets: [{
+          label: 'Daily Exercise Minutes',
+          data: exerciseData,
+          borderColor: '#27ae60',
+          backgroundColor: 'rgba(39, 174, 96, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Exercise Minutes Trend'
+          },
+          tooltip: {
+            mode: 'index'
+          }
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Minutes'
+            },
+            beginAtZero: true
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    });
+  <\/script>
+</body>
+</html>`;
+  
+  // Create a Blob with the HTML content
+  const blob = new Blob([htmlContent], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  // Create a temporary download link and trigger the download
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "index.html";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+})();
