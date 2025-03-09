@@ -4,86 +4,117 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Apple Health Dashboard</title>
-  <!-- Load Chart.js from CDN -->
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    /* ----- Basic Reset & Font ----- */
+    /* ---------------------------
+       Global / Reset
+    ----------------------------*/
     * {
-      margin: 0; padding: 0; box-sizing: border-box;
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
     }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      line-height: 1.5;
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: #181818; /* Dark background */
+      color: #f5f5f5;      /* Light text */
     }
 
-    /* ----- Header ----- */
+    /* ---------------------------
+       Header / Hero
+    ----------------------------*/
     header {
-      background: #2c3e50;
-      color: #fff;
-      padding: 2rem;
+      background: linear-gradient(135deg, #0D7377, #14FFEC);
+      padding: 4rem 2rem;
       text-align: center;
-      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
     header h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
+      font-weight: 600;
       margin-bottom: 0.5rem;
+      color: #fff;
     }
     header p {
-      font-size: 1rem;
+      font-size: 1.1rem;
       opacity: 0.9;
+      color: #e0f7f4;
     }
 
-    /* ----- Chart Container ----- */
+    /* ---------------------------
+       Chart Container
+    ----------------------------*/
     .charts-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 2rem;
-      padding: 1rem;
-      max-width: 1200px;
+      padding: 2rem 1rem;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
+    /* ---------------------------
+       Chart Cards
+    ----------------------------*/
     .chart-card {
-      background: #fff;
-      border-radius: 8px;
-      width: 350px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 1rem;
+      background: #242424;
+      border-radius: 12px;
+      width: 380px;
+      max-width: 90%;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    .chart-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
     }
     .chart-card h2 {
+      font-size: 1.3rem;
       margin-bottom: 1rem;
-      font-size: 1.2rem;
-      color: #444;
+      color: #14FFEC;
       text-align: center;
     }
     .chart-card canvas {
-      max-width: 100%;
-      height: auto;
+      width: 100% !important;
+      height: auto !important;
     }
 
-    /* ----- Footer ----- */
+    /* Simple fade-in animation */
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ---------------------------
+       Footer
+    ----------------------------*/
     footer {
       text-align: center;
       padding: 1rem;
-      background: #eee;
-      margin-top: 1rem;
+      background: #1f1f1f;
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
     footer p {
       font-size: 0.9rem;
-      color: #555;
-    }
-
-    /* ----- Responsive Adjustments ----- */
-    @media (max-width: 768px) {
-      .chart-card {
-        width: 90%;
-      }
+      color: #888;
     }
   </style>
 </head>
@@ -91,29 +122,25 @@
 
   <header>
     <h1>My Apple Health Dashboard</h1>
-    <p>Visualizing Past Trends, Current Metrics, & Future Projections</p>
+    <p>Visualizing Past Trends, Current Metrics & Future Projections</p>
   </header>
 
   <section class="charts-container">
-
     <!-- HRV Card -->
     <div class="chart-card">
       <h2>Heart Rate Variability (HRV)</h2>
       <canvas id="hrvChart"></canvas>
     </div>
-
     <!-- Sleep Card -->
     <div class="chart-card">
       <h2>Sleep Duration</h2>
       <canvas id="sleepChart"></canvas>
     </div>
-
     <!-- Exercise Card -->
     <div class="chart-card">
       <h2>Exercise Minutes</h2>
       <canvas id="exerciseChart"></canvas>
     </div>
-
   </section>
 
   <footer>
@@ -145,6 +172,29 @@
     const exerciseLabels = labelsPast.concat(labelsFuture);
     const exerciseData = exercisePast.concat(exerciseFuture);
 
+    // Shared Chart Options for a Dark Theme
+    const darkChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#f5f5f5' } },
+        title:  { color: '#f5f5f5' },
+        tooltip:{ titleColor:'#f5f5f5', bodyColor:'#f5f5f5', backgroundColor:'#333' }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#f5f5f5' },
+          title: { display: true, text: 'Year', color: '#f5f5f5' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        },
+        y: {
+          ticks: { color: '#f5f5f5' },
+          title: { display: true, text: '', color: '#f5f5f5' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        }
+      }
+    };
+
     // -------- Chart: HRV --------
     const hrvCtx = document.getElementById('hrvChart').getContext('2d');
     new Chart(hrvCtx, {
@@ -154,35 +204,30 @@
         datasets: [{
           label: 'HRV (ms)',
           data: hrvData,
-          borderColor: '#e74c3c',
-          backgroundColor: 'rgba(231,76,60,0.1)',
-          pointBackgroundColor: '#e74c3c',
+          borderColor: '#FF3F66',
+          backgroundColor: 'rgba(255,63,102,0.2)',
+          pointBackgroundColor: '#FF3F66',
+          pointRadius: 5,
           fill: true,
           tension: 0.3
         }]
       },
       options: {
+        ...darkChartOptions,
         plugins: {
+          ...darkChartOptions.plugins,
           title: {
             display: true,
-            text: 'Heart Rate Variability Trend'
-          },
-          tooltip: {
-            mode: 'index'
+            text: 'Heart Rate Variability Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
           }
         },
         scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Year'
-            }
-          },
+          x: { ...darkChartOptions.scales.x },
           y: {
-            title: {
-              display: true,
-              text: 'ms'
-            },
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: 'ms', color: '#f5f5f5' },
             beginAtZero: false
           }
         }
@@ -198,33 +243,27 @@
         datasets: [{
           label: 'Sleep Duration (hours)',
           data: sleepData,
-          backgroundColor: '#3498db',
-          borderColor: '#2980b9',
+          backgroundColor: '#2DC7FF',
+          borderColor: '#1EA5DB',
           borderWidth: 1
         }]
       },
       options: {
+        ...darkChartOptions,
         plugins: {
+          ...darkChartOptions.plugins,
           title: {
             display: true,
-            text: 'Sleep Duration Trend'
-          },
-          tooltip: {
-            mode: 'index'
+            text: 'Sleep Duration Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
           }
         },
         scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Year'
-            }
-          },
+          x: { ...darkChartOptions.scales.x },
           y: {
-            title: {
-              display: true,
-              text: 'Hours'
-            },
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: 'Hours', color: '#f5f5f5' },
             beginAtZero: true,
             suggestedMax: 10
           }
@@ -241,35 +280,30 @@
         datasets: [{
           label: 'Daily Exercise Minutes',
           data: exerciseData,
-          borderColor: '#27ae60',
-          backgroundColor: 'rgba(39,174,96,0.1)',
-          pointBackgroundColor: '#27ae60',
+          borderColor: '#33FFAA',
+          backgroundColor: 'rgba(51,255,170,0.2)',
+          pointBackgroundColor: '#33FFAA',
+          pointRadius: 5,
           fill: true,
           tension: 0.3
         }]
       },
       options: {
+        ...darkChartOptions,
         plugins: {
+          ...darkChartOptions.plugins,
           title: {
             display: true,
-            text: 'Exercise Minutes Trend'
-          },
-          tooltip: {
-            mode: 'index'
+            text: 'Exercise Minutes Trend',
+            color: '#f5f5f5',
+            font: { size: 16 }
           }
         },
         scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Year'
-            }
-          },
+          x: { ...darkChartOptions.scales.x },
           y: {
-            title: {
-              display: true,
-              text: 'Minutes'
-            },
+            ...darkChartOptions.scales.y,
+            title: { display: true, text: 'Minutes', color: '#f5f5f5' },
             beginAtZero: true
           }
         }
